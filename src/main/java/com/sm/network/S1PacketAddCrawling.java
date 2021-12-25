@@ -1,0 +1,33 @@
+package com.sm.network;
+
+import com.sm.main.Sm;
+import com.sm.utils.CrawlingHandler;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+public class S1PacketAddCrawling implements IMessage {
+
+	public S1PacketAddCrawling() {}
+	
+	@Override
+	public void fromBytes(ByteBuf data) {}
+
+	@Override
+	public void toBytes(ByteBuf data) {}
+	
+	public static class Handler implements IMessageHandler<S1PacketAddCrawling, IMessage>
+	{
+		public IMessage onMessage(S1PacketAddCrawling message, MessageContext ctx) 
+		{
+			EntityPlayer player = Sm.proxy.getEntityPlayer(ctx);
+			Sm.network.sendToDimension(new C1PacketAddCrawling(player.getName()), player.dimension);
+			CrawlingHandler.addPlayer(player.getName());
+			return null;
+		}
+	}
+}
